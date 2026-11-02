@@ -101,13 +101,19 @@ def check(base, model, gap, timeout, proxy=False):
 
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
+    if not argv or argv[0] in ("-h", "--help"):     # nothing to check is not "all healthy"
+        print(__doc__)
+        return 0 if argv else 2
     opts, urls, proxies = {"--model": None, "--gap": "10", "--timeout": "60"}, [], []
     while argv:
         a = argv.pop(0)
-        if a == "--proxy":
+        if a == "--proxy" and argv:
             proxies.append(argv.pop(0))
-        elif a in opts:
+        elif a in opts and argv:
             opts[a] = argv.pop(0)
+        elif a.startswith("-"):
+            print(f"unknown option or missing value: {a} (see --help)", file=sys.stderr)
+            return 2
         else:
             urls.append(a)
     results = [check(u, opts["--model"], float(opts["--gap"]), float(opts["--timeout"])) for u in urls]

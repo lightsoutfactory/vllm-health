@@ -5,7 +5,7 @@ import json
 import socket
 import threading
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import vllm_health as health
@@ -107,6 +107,15 @@ class LlmHealthTests(unittest.TestCase):
         code, out = self.run_check("--proxy", s.url)
         self.assertEqual((code, s.chats, s.reads), (0, 0, 0))
         self.assertIn("proxy, models: test-model", out)
+
+    def test_help_and_bad_arguments(self):
+        for argv, code in (([], 2), (["--help"], 0), (["-h"], 0), (["--gpa", "1"], 2), (["--gap"], 2)):
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                self.assertEqual(health.main(argv), code, argv)
+        with redirect_stdout(io.StringIO()) as out:
+            health.main(["--help"])
+        self.assertIn("vllm-health", out.getvalue())
 
     def test_dead_backend_fails(self):
         with socket.socket() as sock:

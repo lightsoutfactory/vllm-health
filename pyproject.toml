@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vllm-health"
+version = "1.0.1"
+description = "A vLLM health check that never waits in the queue: busy servers are left alone, stuck or dead ones fail."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "LightsOut Factory", email = "support@lightsoutfactory.ai" }]
+keywords = ["dgx-spark", "gpu", "health-check", "inference", "llm", "local-llm", "monitoring", "nvidia", "openai-api", "prometheus-metrics", "python", "self-hosted", "vllm", "watchdog"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.urls]
+Homepage = "https://lightsoutfactory.ai/open-source/"
+Source = "https://github.com/lightsoutfactory/vllm-health"
+
+[project.scripts]
+vllm-health = "vllm_health:main"
+
+[tool.setuptools]
+py-modules = ["vllm_health"]

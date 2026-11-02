@@ -13,6 +13,15 @@ OK   http://gpu2:8000/v1  model=main  3641 ms  -> 'ready'
 OK   http://gpu2:8010/v1  proxy, models: main
 ```
 
+## Install
+
+```sh
+pip install git+https://github.com/lightsoutfactory/vllm-health
+vllm-health http://127.0.0.1:8000/v1
+```
+
+Or copy `vllm_health.py` next to your server: it is one file with no dependencies.
+
 ## Why
 
 The usual check sends the model a small chat request and restarts the server when no answer comes in time. On a
